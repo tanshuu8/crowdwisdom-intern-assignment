@@ -1,7 +1,7 @@
 {
-  "transcript_json": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\transcripts\\transcript_20250920_220339.json",
+  "transcript_json": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\transcripts\\transcript_20250921_192626.json",
   "logs": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\logs\\logs.json",
-  "run_meta": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\metadata\\run_meta_20250920_220339.json",
-  "stitched_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\full_conversation_20250920_220339.wav",
-  "srt": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\transcripts\\transcript_20250920_220339.srt"
+  "run_meta": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\metadata\\run_meta_20250921_192626.json",
+  "stitched_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\full_conversation_20250921_192626.wav",
+  "srt": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\transcripts\\transcript_20250921_192626.srt"
 }

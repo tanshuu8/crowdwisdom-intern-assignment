@@ -1,12 +1,26 @@
-# Ignore virtual environments
-.venv*/
-venv/
-env/
-
-# Ignore Python cache files
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
-# Ignore logs if not needed
+# Virtual environments
+.venv/
+.venv312/
+env/
+venv/
+
+# Outputs
+outputs/audio/*
+outputs/full_conversation_*.wav
+outputs/metadata/*
+outputs/logs/*
+
+# But keep transcripts (JSON + SRT)
+!outputs/transcripts/*.json
+!outputs/transcripts/*.srt
+
+# Jupyter / temp
+*.ipynb_checkpoints
+*.DS_Store
 *.log

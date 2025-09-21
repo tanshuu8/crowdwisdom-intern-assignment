@@ -1,9 +1,11 @@
-# agents/stt_agent.py
 """
 Robust STTAgent for CrowdWisdom project.
 
 - Honors CW_STT_FORCE_MOCK env var or force_mock constructor arg.
-- Tries whisper_timestamped first, then openai-whisper (module 'whisper').
+- Supports three backends:
+    1. whisper_timestamped (local)
+    2. openai-whisper (local module "whisper")
+    3. OpenAI API (if model_size == "openai")
 - Falls back to a deterministic MOCK that returns a single segment.
 - transcribe(audio_path) -> dict: {'text': str, 'segments': List[{'start','end','text'}], 'language': str}
 - export_srt(segments, out_path) writes an SRT file.
@@ -36,111 +38,105 @@ class STTAgent:
             self.impl_name = "mock"
             return
 
-        # Try whisper_timestamped
+        # --- OpenAI API mode ---
+        if self.model_size.lower() == "openai":
+            try:
+                import openai  # type: ignore
+                self.impl_name = "openai"
+                self.impl_module = openai
+                logger.info("[STTAgent] Using OpenAI API backend for STT.")
+                return
+            except Exception as e:
+                logger.warning("[STTAgent] Failed to init OpenAI API backend: %s", e)
+
+        # --- Try whisper_timestamped ---
         try:
             import whisper_timestamped as wst  # type: ignore
             self.impl_module = wst
-            load = getattr(wst, "load_model", None)
-            if callable(load):
+            if hasattr(wst, "load_model"):
                 logger.info("[STTAgent] Loading whisper_timestamped model '%s' ...", self.model_size)
-                self.model = load(self.model_size, device=self.device)
+                self.model = wst.load_model(self.model_size, device=self.device)
             self.impl_name = "whisper_timestamped"
             logger.info("[STTAgent] Using whisper_timestamped backend.")
             return
+        except ImportError:
+            logger.debug("[STTAgent] whisper_timestamped not installed.")
         except Exception as e:
-            logger.debug("[STTAgent] whisper_timestamped unavailable: %s", e)
+            logger.warning("[STTAgent] whisper_timestamped failed: %s", e)
 
-        # Try openai-whisper
+        # --- Try openai-whisper (local) ---
         try:
             import whisper as wh  # type: ignore
             self.impl_module = wh
-            load = getattr(wh, "load_model", None)
-            if callable(load):
+            if hasattr(wh, "load_model"):
                 logger.info("[STTAgent] Loading openai-whisper model '%s' ...", self.model_size)
-                self.model = load(self.model_size, device=self.device)
+                self.model = wh.load_model(self.model_size, device=self.device)
             self.impl_name = "whisper"
             logger.info("[STTAgent] Using openai-whisper backend.")
             return
+        except ImportError:
+            logger.debug("[STTAgent] openai-whisper not installed.")
         except Exception as e:
-            logger.debug("[STTAgent] openai-whisper unavailable: %s", e)
+            logger.warning("[STTAgent] openai-whisper failed: %s", e)
 
-        # Neither backend loaded
+        # --- Neither backend worked ---
         logger.warning("[STTAgent] No whisper backend available; falling back to MOCK STT.")
         self.impl_name = "mock"
 
     def transcribe(self, audio_path: str, language: Optional[str] = None) -> Dict[str, Any]:
-        """
-        Always returns a dict with 'text', 'segments', 'language'.
-        """
+        """Always returns a dict with 'text', 'segments', 'language'."""
 
-        # Mock mode
+        # --- Mock mode ---
         if self.impl_name == "mock" or self.model is None:
             segs = [self._single_segment_from_wav(audio_path, "[MOCK TRANSCRIPT - STT not available]")]
-            safe_texts = []
-            for s in segs:
-                if isinstance(s, dict) and "text" in s:
-                    safe_texts.append(s["text"])
-                elif isinstance(s, str):
-                    safe_texts.append(s)
-                elif s is not None:
-                    safe_texts.append(str(s))
-            full_text = " ".join(t for t in safe_texts if t).strip()
+            full_text = " ".join(s["text"] for s in segs if isinstance(s, dict))
             return {"text": full_text, "segments": segs, "language": language or "und"}
 
-        # Real backends
+        # --- OpenAI API backend ---
+        if self.impl_name == "openai":
+            try:
+                from openai import OpenAI
+                client = OpenAI()
+                with open(audio_path, "rb") as f:
+                    resp = client.audio.transcriptions.create(
+                        model="gpt-4o-mini-transcribe",
+                        file=f
+                    )
+                text = resp["text"]
+                dur = self._wav_duration(audio_path)
+                segs = [{"start": 0.0, "end": dur, "text": text}]
+                return {"text": text, "segments": segs, "language": language or "und"}
+            except Exception as e:
+                logger.exception("[STTAgent] OpenAI API transcription failed: %s", e)
+                segs = [self._single_segment_from_wav(audio_path, "[OPENAI STT ERROR]")]
+                return {"text": "[OPENAI STT ERROR]", "segments": segs, "language": "und"}
+
+        # --- Local whisper backends ---
         try:
             if self.impl_name == "whisper_timestamped":
-                if hasattr(self.model, "transcribe"):
-                    res = self.model.transcribe(audio_path, language=language)
-                else:
-                    fn = getattr(self.impl_module, "transcribe", None)
-                    res = fn(self.model, audio_path, language=language) if fn else {}
+                res = self.model.transcribe(audio_path, language=language)
             elif self.impl_name == "whisper":
-                if hasattr(self.model, "transcribe"):
-                    res = self.model.transcribe(audio_path, language=language)
-                else:
-                    fn = getattr(self.impl_module, "transcribe", None)
-                    res = fn(self.model, audio_path, language=language) if fn else {}
+                res = self.model.transcribe(audio_path, language=language)
             else:
                 res = {}
         except Exception as e:
             logger.exception("[STTAgent] Transcription failed for %s: %s", audio_path, e)
             segs = [self._single_segment_from_wav(audio_path, "[TRANSCRIBE ERROR]")]
-            safe_texts = [seg["text"] for seg in segs if isinstance(seg, dict) and "text" in seg]
-            return {"text": " ".join(safe_texts), "segments": segs, "language": language or "und"}
+            return {"text": " ".join(s["text"] for s in segs), "segments": segs, "language": language or "und"}
 
-        raw_segments = []
-        if isinstance(res, dict) and "segments" in res:
-            raw_segments = res["segments"]
-        elif isinstance(res, list):
-            raw_segments = res
-        elif isinstance(res, dict) and "text" in res:
+        # --- Normalize segments ---
+        raw_segments = res.get("segments", []) if isinstance(res, dict) else []
+        if isinstance(res, dict) and "text" in res and not raw_segments:
             txt = str(res.get("text", "")).strip()
             segs = [self._single_segment_from_wav(audio_path, txt)]
-            return {"text": txt, "segments": segs, "language": language or "und"}
+            return {"text": txt, "segments": segs, "language": res.get("language", language or "und")}
 
         segments: List[Dict[str, Any]] = []
         for s in raw_segments:
             try:
-                start = None
-                end = None
-                text = ""
-                if isinstance(s, dict):
-                    if "start" in s:
-                        start = float(s["start"])
-                    elif "start_ms" in s:
-                        start = float(s["start_ms"]) / 1000.0
-                    if "end" in s:
-                        end = float(s["end"])
-                    elif "end_ms" in s:
-                        end = float(s["end_ms"]) / 1000.0
-                    text = str(s.get("text", "")).strip()
-                else:
-                    text = str(s).strip()
-                if start is None or end is None:
-                    dur = self._wav_duration(audio_path)
-                    start = 0.0 if start is None else start
-                    end = dur if end is None else end
+                start = float(s.get("start", 0.0))
+                end = float(s.get("end", self._wav_duration(audio_path)))
+                text = str(s.get("text", "")).strip()
                 segments.append({"start": start, "end": end, "text": text})
             except Exception:
                 logger.debug("[STTAgent] Skipping malformed segment: %s", repr(s))
@@ -149,17 +145,8 @@ class STTAgent:
         if not segments:
             segments = [self._single_segment_from_wav(audio_path, "[EMPTY TRANSCRIPT]")]
 
-        safe_texts = []
-        for s in segments:
-            if isinstance(s, dict) and "text" in s:
-                safe_texts.append(s["text"])
-            elif isinstance(s, str):
-                safe_texts.append(s)
-            elif s is not None:
-                safe_texts.append(str(s))
-
-        full_text = " ".join(t for t in safe_texts if t).strip()
-        return {"text": full_text, "segments": segments, "language": language or "und"}
+        full_text = " ".join(seg["text"] for seg in segments if seg.get("text")).strip()
+        return {"text": full_text, "segments": segments, "language": res.get("language", language or "und")}
 
     def _wav_duration(self, path: str) -> float:
         try:
@@ -183,13 +170,11 @@ class STTAgent:
             return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
         lines = []
-        idx = 1
-        for seg in segments:
+        for idx, seg in enumerate(segments, start=1):
             lines.append(str(idx))
             lines.append(f"{fmt(seg['start'])} --> {fmt(seg['end'])}")
             lines.append(seg.get("text", ""))
             lines.append("")
-            idx += 1
 
         os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
         with open(out_path, "w", encoding="utf-8") as fh:
