@@ -1,26 +1,27 @@
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
 # Virtual environments
 .venv/
 .venv312/
-env/
 venv/
+env/
 
-# Outputs
-outputs/audio/*
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Outputs and large audio
+outputs/audio/
 outputs/full_conversation_*.wav
-outputs/metadata/*
-outputs/logs/*
+outputs/*.zip
+outputs/example_run.zip
+outputs/audio/*.wav
 
-# But keep transcripts (JSON + SRT)
+# Keep transcripts only
+!outputs/transcripts/
 !outputs/transcripts/*.json
 !outputs/transcripts/*.srt
 
-# Jupyter / temp
-*.ipynb_checkpoints
-*.DS_Store
+# IDE/editor
+.vscode/
+.DS_Store
 *.log
