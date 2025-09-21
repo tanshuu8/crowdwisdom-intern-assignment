@@ -1,0 +1,40 @@
+{
+  "started_at": "2025-09-20T20:52:59",
+  "max_turns": 4,
+  "stt_model": "tiny",
+  "tts_backend": "auto",
+  "use_real_phonikud": true,
+  "turns": [
+    {
+      "turn": 0,
+      "client_text": "אני רוצה לבטל את המנוי לטלוויזיה שלי. אני לא משתמש בזה יותר.",
+      "ts": "2025-09-20T20:52:59",
+      "client_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_1.wav",
+      "tts_client_duration_ms": 2700,
+      "tts_client_time_s": 0.021701,
+      "stt_error": "'list' object has no attribute 'get'",
+      "cs_action": "retry",
+      "reply_text": "מצטער, לא הצלחתי להבין. תוכל לחזור שוב?",
+      "agent_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_1.wav",
+      "tts_agent_duration_ms": 1700,
+      "tts_agent_time_s": 0.0204,
+      "end_ts": "2025-09-20T20:53:00"
+    },
+    {
+      "turn": 1,
+      "client_text": "הבנתי — מה עליי לעשות כדי לוודא שבוטל ותשלחו לי אישור?",
+      "ts": "2025-09-20T20:53:00",
+      "client_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_2.wav",
+      "tts_client_duration_ms": 2300,
+      "tts_client_time_s": 0.016053,
+      "stt_error": "'list' object has no attribute 'get'",
+      "cs_action": "retry",
+      "reply_text": "מצטער, לא הצלחתי להבין. תוכל לחזור שוב?",
+      "agent_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_2.wav",
+      "tts_agent_duration_ms": 1700,
+      "tts_agent_time_s": 0.034981,
+      "end_ts": "2025-09-20T20:53:01"
+    }
+  ],
+  "finished_at": "2025-09-20T20:53:01"
+}

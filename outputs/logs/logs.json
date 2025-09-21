@@ -1,0 +1,48 @@
+[
+  {
+    "role": "client_tts",
+    "turn": 0,
+    "text": "אני רוצה לבטל את המנוי לטלוויזיה שלי. אני לא משתמש בזה יותר.",
+    "audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_1.wav"
+  },
+  {
+    "role": "stt",
+    "turn": 0,
+    "transcript": "[MOCK TRANSCRIPT - STT not available]"
+  },
+  {
+    "role": "cs_decision",
+    "turn": 0,
+    "action": "verify",
+    "text": "אנא אשר את מספר תעודת הזהות שלך כדי שנוכל להמשיך."
+  },
+  {
+    "role": "agent_tts",
+    "turn": 0,
+    "text": "אנא אשר את מספר תעודת הזהות שלך כדי שנוכל להמשיך.",
+    "audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_1.wav"
+  },
+  {
+    "role": "client_tts",
+    "turn": 1,
+    "text": "הבנתי — מה עליי לעשות כדי לוודא שבוטל ותשלחו לי אישור?",
+    "audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_2.wav"
+  },
+  {
+    "role": "stt",
+    "turn": 1,
+    "transcript": "[MOCK TRANSCRIPT - STT not available]"
+  },
+  {
+    "role": "cs_decision",
+    "turn": 1,
+    "action": "confirm",
+    "text": "הבקשה שלך בוטלה בהצלחה. נשלח לך אישור למייל תוך 24 שעות."
+  },
+  {
+    "role": "agent_tts",
+    "turn": 1,
+    "text": "הבקשה שלך בוטלה בהצלחה. נשלח לך אישור למייל תוך 24 שעות.",
+    "audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_2.wav"
+  }
+]

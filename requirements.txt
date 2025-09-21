@@ -1,0 +1,11 @@
+# minimal; add or pin versions as needed
+numpy
+pydub
+soundfile
+ffmpeg-python
+python-dotenv
+litellm    # if you plan to use it
+openai     # optional for some backends
+whisper     # or whisperx if you prefer
+phonikud    # if available via pip, otherwise vendor the package
+tqdm

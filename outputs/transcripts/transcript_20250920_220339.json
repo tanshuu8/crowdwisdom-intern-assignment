@@ -1,0 +1,22 @@
+[
+  {
+    "time": "2025-09-20T22:03:37",
+    "speaker": "client",
+    "text": "[MOCK TRANSCRIPT - STT not available]"
+  },
+  {
+    "time": "2025-09-20T22:03:37",
+    "speaker": "agent",
+    "text": "אנא אשר את מספר תעודת הזהות שלך כדי שנוכל להמשיך."
+  },
+  {
+    "time": "2025-09-20T22:03:39",
+    "speaker": "client",
+    "text": "[MOCK TRANSCRIPT - STT not available]"
+  },
+  {
+    "time": "2025-09-20T22:03:39",
+    "speaker": "agent",
+    "text": "הבקשה שלך בוטלה בהצלחה. נשלח לך אישור למייל תוך 24 שעות."
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "started_at": "2025-09-20T21:58:50",
+  "max_turns": 4,
+  "stt_model": "tiny",
+  "tts_backend": "gtts",
+  "use_real_phonikud": true,
+  "turns": [
+    {
+      "turn": 0,
+      "client_text": "אני רוצה לבטל את המנוי לטלוויזיה שלי. אני לא משתמש בזה יותר.",
+      "ts": "2025-09-20T21:58:50",
+      "client_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_1.wav",
+      "tts_client_duration_ms": 2700,
+      "tts_client_time_s": 0.0,
+      "stt_text": "[MOCK TRANSCRIPT - STT not available]",
+      "stt_segments": [
+        {
+          "start": 0.0,
+          "end": 2.6999375,
+          "text": "[MOCK TRANSCRIPT - STT not available]"
+        }
+      ],
+      "cs_action": "close",
+      "reply_text": "תודה שפנית לשירות הלקוחות. יום נעים!",
+      "agent_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_1.wav",
+      "tts_agent_duration_ms": 1500,
+      "tts_agent_time_s": 0.006549,
+      "end_ts": "2025-09-20T21:58:53"
+    }
+  ],
+  "finished_at": "2025-09-20T21:58:53"
+}

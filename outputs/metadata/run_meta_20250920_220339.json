@@ -1,0 +1,54 @@
+{
+  "started_at": "2025-09-20T22:03:34",
+  "max_turns": 4,
+  "stt_model": "tiny",
+  "tts_backend": "gtts",
+  "use_real_phonikud": true,
+  "turns": [
+    {
+      "turn": 0,
+      "client_text": "אני רוצה לבטל את המנוי לטלוויזיה שלי. אני לא משתמש בזה יותר.",
+      "ts": "2025-09-20T22:03:34",
+      "client_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_1.wav",
+      "tts_client_duration_ms": 2700,
+      "tts_client_time_s": 0.214065,
+      "stt_text": "[MOCK TRANSCRIPT - STT not available]",
+      "stt_segments": [
+        {
+          "start": 0.0,
+          "end": 2.6999375,
+          "text": "[MOCK TRANSCRIPT - STT not available]"
+        }
+      ],
+      "cs_action": "verify",
+      "reply_text": "אנא אשר את מספר תעודת הזהות שלך כדי שנוכל להמשיך.",
+      "agent_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_1.wav",
+      "tts_agent_duration_ms": 2300,
+      "tts_agent_time_s": 0.016129,
+      "end_ts": "2025-09-20T22:03:37"
+    },
+    {
+      "turn": 1,
+      "client_text": "הבנתי — מה עליי לעשות כדי לוודא שבוטל ותשלחו לי אישור?",
+      "ts": "2025-09-20T22:03:37",
+      "client_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\client_2.wav",
+      "tts_client_duration_ms": 2300,
+      "tts_client_time_s": 0.008133,
+      "stt_text": "[MOCK TRANSCRIPT - STT not available]",
+      "stt_segments": [
+        {
+          "start": 0.0,
+          "end": 2.2999375,
+          "text": "[MOCK TRANSCRIPT - STT not available]"
+        }
+      ],
+      "cs_action": "confirm",
+      "reply_text": "הבקשה שלך בוטלה בהצלחה. נשלח לך אישור למייל תוך 24 שעות.",
+      "agent_audio": "C:\\Users\\user\\crowdwisdom-intern-assignment\\outputs\\audio\\agent_2.wav",
+      "tts_agent_duration_ms": 2700,
+      "tts_agent_time_s": 0.009776,
+      "end_ts": "2025-09-20T22:03:39"
+    }
+  ],
+  "finished_at": "2025-09-20T22:03:39"
+}
